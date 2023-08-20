@@ -1,0 +1,210 @@
+
+<html >
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz de Gastos</title>
+<style>
+    body {
+    background-color: #A2E4C9; 
+    font-family: 'Gill Sans', 'Gill Sans MT',
+  }
+  
+  #quiz-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+ margin-left: auto;
+ margin-right: auto;
+  }
+  
+  h1 {
+    color: black;
+  }
+  
+  button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Gill Sans';
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .hidden {
+    display: none;
+  }
+  .num{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+  .ponto{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    float: right;
+  }
+</style>
+
+</head>
+<body>
+<div id="quiz-container">
+  <h1>Quiz de Gastos</h1>
+  <div id="pergunta"></div>
+  <button id="btn-1"></button>
+  <button id="btn-2"></button>
+  <button id="btn-3"></button>
+  <br>
+  <div id="pontos" class="ponto"></div>
+  <div id="codpergunta" class="num"> </div>
+
+  <div id="resultado" class="hidden"></div>
+</div>
+
+<script >// Array de perguntas e opções
+    const questions = [
+        {
+            question: " Quando você recebe seu salário, o que você faz primeiro?",
+            options: [
+                "Gasto em compras ou entretenimento",
+                "Pago minhas contas e despesas imediatamente",
+                "Guardo uma parte em uma conta de poupança"
+            ]
+        },
+        {
+            question: "Quanto você gasta em média por semana?",
+            options: ["Muito", "Moderadamente", "Pouco"
+            ]
+        },
+        {
+            question: "Você costuma fazer um orçamento mensal?",
+            options: [
+                "Não, não vejo necessidade de fazer um orçamento",
+    
+                "Às vezes, tento controlar minhas despesas",
+    
+                "Sim, sempre planejo meus gastos"
+            ]
+        },
+    
+    
+        {
+            question: "Você segue um orçamento mensal?",
+            options: ["Nunca", "Às vezes", "Sempre"
+            ]
+        },
+        {
+            question: "Você costuma acompanhar seus gastos mensais?",
+            options: [
+                "Não, não tenho ideia de onde meu dinheiro vai",
+                "Às vezes, faço uma análise básica dos gastos",
+    
+                "Sim, mantenho um registro detalhado dos meus gastos"
+            ]
+        },
+        {
+            question: "Você costuma fazer compras impulsivas?",
+            options: ["Sempre", "Às vezes", "Raramente"
+            ]
+        },
+        {
+            question: "Como você decide se pode fazer uma compra maior?",
+            options: [
+                "Eu não costumo fazer compras maiores",
+                "Eu compro se quero algo, independentemente do preço",
+                "Eu sempre comparo preços e avalio se é realmente necessário"
+            ]
+        },
+    ];
+    
+    // Variáveis para controlar o estado do quiz
+    let indice = 0; // Índice da pergunta atual
+    let score = 0;// Pontuação acumulada
+    
+    
+    const perguntaElement = document.getElementById("pergunta");
+    const btn1Element = document.getElementById("btn-1");
+    const btn2Element = document.getElementById("btn-2");
+    const btn3Element = document.getElementById("btn-3");
+    const resultadoElement = document.getElementById("resultado");
+    const codpergElement = document.getElementById("codpergunta");
+    const pontoElement = document.getElementById("pontos");
+    
+    function showQuestion() {
+    
+    
+        const indiceData = questions[indice];
+        perguntaElement.textContent = indiceData.question;
+        btn1Element.textContent = indiceData.options[0];
+        btn2Element.textContent = indiceData.options[1];
+        btn3Element.textContent = indiceData.options[2];
+    
+        const numeroDaQuestao = indice + 1;
+        const totalQuestoes = questions.length;
+        pontoElement.textContent = score;
+        codpergElement.textContent = ` ${numeroDaQuestao} / ${totalQuestoes}`;
+    }
+    // atualizar a pontuação baseada na opção escolhida
+    function updateScore(optionIndex) {
+        if (optionIndex === 0) {
+            score += 3;
+        } else if (optionIndex === 1) {
+            score += 2;
+        } else if (optionIndex === 2) {
+            score += 1;
+        }
+    }
+    // Event listeners para os botões de opção
+    btn1Element.addEventListener("click", () => {
+        updateScore(0);
+        nextQuestion();
+    });
+    
+    btn2Element.addEventListener("click", () => {
+        updateScore(1);
+        nextQuestion();
+    });
+    
+    btn3Element.addEventListener("click", () => {
+        updateScore(2);
+        nextQuestion();
+    });
+    
+    
+    function showResult() {
+        btn1Element.style.display = 'none';
+        btn2Element.style.display = 'none';
+        btn3Element.style.display = 'none';
+        perguntaElement.style.display = 'none';
+        codpergElement.style.display = 'none';
+        pontoElement.style.display='none';
+    
+        // Exibir o resultado
+        resultadoElement.classList.remove("hidden");
+        if (score <= 10) {
+            resultadoElement.textContent = "Você gasta pouco e está bem no controle.";
+        } else if (score <= 20) {
+            resultadoElement.textContent = "Você gasta moderadamente e pode melhorar sua gestão.";
+        } else {
+            resultadoElement.textContent = "Você gasta bastante e precisa considerar mudanças.";
+        }
+    }
+    
+    
+    function nextQuestion() {
+        indice++;// Incrementa o índice da pergunta
+        if (indice < questions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
+    
+    showQuestion();
+    </script>
+</body>
+</html>
