@@ -1,43 +1,73 @@
 body {
-    background-color: #A2E4C9; 
-    font-family: 'Gill Sans', 'Gill Sans MT',
-  }
-  
-  #quiz-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
- margin-left: auto;
- margin-right: auto;
-  }
-  
-  h1 {
-    color: black;
-  }
-  
-  button {
-    display: block;
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Gill Sans';
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .hidden {
-    display: none;
-  }
-  .num{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  }
-  .ponto{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    float: right;
-  }
+  background-color: #A2E4C9;
+  font-family: 'Gill Sans', 'Gill Sans MT',
+}
+
+#quiz-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1 {
+  color: black;
+}
+/* botão Respostas */
+.respostas {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Gill Sans';
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.respostas:active {
+ 
+  transform: translateY(4px);
+}
+
+.selecionado{
+  background-color: #C2D6FF;
+}
+
+/*  Respostas  final */
+.hidden {
+  display: none;
+}
+/* numero das quetões */
+.num {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+/* pontuação */
+.ponto {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  float: right;
+}
+/* proxima pegunta */
+.BtnProximo {
+  background: #9DADBC;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Gill Sans';
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  float: right;
+  padding: 8px;
+}
+
+.BtnProximo:active {
+
+  box-shadow: 0 3px #999;
+  transform: translateY(4px);
+}

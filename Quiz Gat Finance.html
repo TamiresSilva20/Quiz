@@ -5,49 +5,80 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiz de Gastos</title>
 <style>
-    body {
-    background-color: #A2E4C9; 
-    font-family: 'Gill Sans', 'Gill Sans MT',
-  }
-  
-  #quiz-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
- margin-left: auto;
- margin-right: auto;
-  }
-  
-  h1 {
-    color: black;
-  }
-  
-  button {
-    display: block;
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Gill Sans';
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .hidden {
-    display: none;
-  }
-  .num{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  }
-  .ponto{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    float: right;
-  }
+   body {
+  background-color: #A2E4C9;
+  font-family: 'Gill Sans', 'Gill Sans MT',
+}
+
+#quiz-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1 {
+  color: black;
+}
+/* botão Respostas */
+.respostas {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Gill Sans';
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.respostas:active {
+ 
+  transform: translateY(4px);
+}
+
+.selecionado{
+  background-color: #C2D6FF;
+}
+
+/*  Respostas  final */
+.hidden {
+  display: none;
+}
+/* numero das quetões */
+.num {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+/* pontuação */
+.ponto {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  float: right;
+}
+/* proxima pegunta */
+.BtnProximo {
+  background: #9DADBC;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Gill Sans';
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  float: right;
+  padding: 8px;
+}
+
+.BtnProximo:active {
+
+  box-shadow: 0 3px #999;
+  transform: translateY(4px);
+}
+
 </style>
 
 </head>
@@ -65,8 +96,9 @@
   <div id="resultado" class="hidden"></div>
 </div>
 
-<script >// Array de perguntas e opções
-    const questions = [
+<script >
+// Array de perguntas e opções
+    const questions = [ //variáveis que possuem um valor fixo,uma constante somente leitura
         {
             question: " Quando você recebe seu salário, o que você faz primeiro?",
             options: [
@@ -92,11 +124,7 @@
         },
     
     
-        {
-            question: "Você segue um orçamento mensal?",
-            options: ["Nunca", "Às vezes", "Sempre"
-            ]
-        },
+    
         {
             question: "Você costuma acompanhar seus gastos mensais?",
             options: [
@@ -119,10 +147,48 @@
                 "Eu sempre comparo preços e avalio se é realmente necessário"
             ]
         },
+    
+        {
+            question: "Como você costuma lidar com gastos inesperados?",
+            options: ["Fico muito estressado(a) e não sei como reagir",
+                "Tento ajustar meu orçamento para acomodar os gastos inesperados",
+                "Tenho uma reserva de emergência para lidar com essas situações"
+    
+            ]
+    
+        },
+        {
+    
+            question: " Qual é a sua abordagem em relação a compras online?",
+            options: ["Compro impulsivamente sempre que vejo algo interessante",
+                "Faço compras online, mas costumo comparar preços antes de comprar",
+                "Planejo minhas compras online com antecedência e aproveito promoções"
+    
+            ]
+        }, {
+            question: "Como você decide gastar em itens de luxo ou supérfluos?",
+            options: ["Sempre invisto em itens de luxo, mesmo que não sejam necessários",
+                "Às vezes me permito alguns luxos, dependendo da situação financeira",
+                "Evito gastos em itens supérfluos e priorizo investimentos ou economias"
+    
+            ]
+    
+        },
+        {
+            question: "Como você geralmente decide gastar em atividades sociais e saídas com amigos?",
+            options: ["Sempre participo, não me importa quanto custa",
+                "Equilibro meu envolvimento social com meu orçamento",
+                "Prefiro atividades mais econômicas para não comprometer minhas finanças",
+    
+            ]
+    
+    
+    
+        },
     ];
     
     // Variáveis para controlar o estado do quiz
-    let indice = 0; // Índice da pergunta atual
+    let currentQuestion = 0; // Índice da pergunta atual
     let score = 0;// Pontuação acumulada
     
     
@@ -133,17 +199,16 @@
     const resultadoElement = document.getElementById("resultado");
     const codpergElement = document.getElementById("codpergunta");
     const pontoElement = document.getElementById("pontos");
+    const btnProximo = document.getElementById("btnNext");
     
     function showQuestion() {
+        const currentQuestionData = questions[currentQuestion];
+        perguntaElement.textContent = currentQuestionData.question;
+        btn1Element.textContent = currentQuestionData.options[0];
+        btn2Element.textContent = currentQuestionData.options[1];
+        btn3Element.textContent = currentQuestionData.options[2];
     
-    
-        const indiceData = questions[indice];
-        perguntaElement.textContent = indiceData.question;
-        btn1Element.textContent = indiceData.options[0];
-        btn2Element.textContent = indiceData.options[1];
-        btn3Element.textContent = indiceData.options[2];
-    
-        const numeroDaQuestao = indice + 1;
+        const numeroDaQuestao = currentQuestion + 1;
         const totalQuestoes = questions.length;
         pontoElement.textContent = score;
         codpergElement.textContent = ` ${numeroDaQuestao} / ${totalQuestoes}`;
@@ -158,21 +223,31 @@
             score += 1;
         }
     }
+    
+    let selectedOptionIndex = -1;
     // Event listeners para os botões de opção
     btn1Element.addEventListener("click", () => {
-        updateScore(0);
-        nextQuestion();
+        selectedOptionIndex = 0;
+    
     });
     
     btn2Element.addEventListener("click", () => {
-        updateScore(1);
-        nextQuestion();
+        selectedOptionIndex = 1;
+    
     });
     
     btn3Element.addEventListener("click", () => {
-        updateScore(2);
+        selectedOptionIndex = 2;
+    
+    });
+    btnProximo.addEventListener("click", () => {
+        if (selectedOptionIndex !== -1) {
+            updateScore(selectedOptionIndex);
+            selectedOptionIndex = -1; // Reseta a seleção da opção
+        }
         nextQuestion();
     });
+    
     
     
     function showResult() {
@@ -181,12 +256,13 @@
         btn3Element.style.display = 'none';
         perguntaElement.style.display = 'none';
         codpergElement.style.display = 'none';
-        pontoElement.style.display='none';
+        pontoElement.style.display = 'none';
+        btnProximo.style.display = 'none';
     
         // Exibir o resultado
         resultadoElement.classList.remove("hidden");
         if (score <= 10) {
-            resultadoElement.textContent = "Você gasta pouco e está bem no controle.";
+            resultadoElement.textContent = "Você gasta pouco e está bem no controle."; //textContent retorna todo o conteúdo de texto, incluindo o texto oculto pelo CSS
         } else if (score <= 20) {
             resultadoElement.textContent = "Você gasta moderadamente e pode melhorar sua gestão.";
         } else {
@@ -196,8 +272,8 @@
     
     
     function nextQuestion() {
-        indice++;// Incrementa o índice da pergunta
-        if (indice < questions.length) {
+        currentQuestion++;// Incrementa o índice da pergunta
+        if (currentQuestion < questions.length) {
             showQuestion();
         } else {
             showResult();
@@ -205,6 +281,18 @@
     }
     
     showQuestion();
+    
+    //Botão selecionado
+    
+    const btnResposta = document.querySelectorAll('.respostas');
+    
+    btnResposta.forEach(button => {
+        button.addEventListener('click', () => {
+            btnResposta.forEach(b => b.classList.remove('selecionado')); // Remove a classe 'selecionado' de todos os botões
+            button.classList.add('selecionado'); // Adiciona a classe 'selecionado' ao botão clicado
+        });
+    });
+    
     </script>
 </body>
 </html>
