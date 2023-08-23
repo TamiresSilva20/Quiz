@@ -103,6 +103,9 @@ const pontoElement = document.getElementById("pontos");
 const btnProximo = document.getElementById("btnNext");
 
 function showQuestion() {
+
+    
+
     const currentQuestionData = questions[currentQuestion];
     perguntaElement.textContent = currentQuestionData.question;
     btn1Element.textContent = currentQuestionData.options[0];
@@ -176,6 +179,8 @@ function nextQuestion() {
     currentQuestion++;// Incrementa o índice da pergunta
     if (currentQuestion < questions.length) {
         showQuestion();
+        btnResposta.forEach(b => b.classList.remove('selecionado'));
+
     } else {
         showResult();
     }
