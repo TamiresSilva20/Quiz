@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparação de Investimentos</title>
+  <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+  <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+  <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+  <script src="https://cdn.amcharts.com/lib/4/lang/pt_BR.js"></script>
+</head>
+<body>
+  <h1>Comparação de Investimentos</h1>
+  <form id="investmentForm">
+    <label for="initialAmount">Valor Inicial:</label>
+    <input type="number" id="initialAmount" required><br>
+    
+    <label for="monthlyContribution">Contribuição Mensal:</label>
+    <input type="number" id="monthlyContribution" required><br>
+    
+    <label for="time">Tempo:</label>
+    <input type="number" id="time" required>
+    <select id="timeUnit">
+      <option value="months">Meses</option>
+      <option value="years">Anos</option>
+    </select><br>
+    
+    <button type="button" onclick="calculateInvestments()">Calcular</button>
+  </form>
+
+  <div id="chartDiv" style="width: 100%; height: 400px;"></div>
+
+  <script>
+    function calculateInvestments() {
+      const initialAmount = parseFloat(document.getElementById('initialAmount').value);
+      const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value);
+      const time = parseFloat(document.getElementById('time').value);
+      const timeUnit = document.getElementById('timeUnit').value;
+
+      const cdiRate = 0.005; // Exemplo de taxa CDI
+      const poupancaRate = 0.004; // Exemplo de taxa de poupança
+      const tesouroDiretoRate = 0.007; // Exemplo de taxa Tesouro Direto
+      
+      const data = [];
+      let cumulativeAmount = initialAmount;
+
+      for (let i = 1; i <= time; i++) {
+        const month = timeUnit === 'years' ? i * 12 : i;
+        
+        cumulativeAmount += monthlyContribution;
+
+        const cdiValue = cumulativeAmount * Math.pow(1 + cdiRate, month);
+        const poupancaValue = cumulativeAmount * Math.pow(1 + poupancaRate, month);
+        const tesouroDiretoValue = cumulativeAmount * Math.pow(1 + tesouroDiretoRate, month);
+
+        data.push({
+          month,
+          cdi: cdiValue,
+          poupanca: poupancaValue,
+          tesouroDireto: tesouroDiretoValue,
+        });
+      }
+      generateChart(data);
+    }
+    function generateChart(data) {
+      am4core.useTheme(am4themes_animated);
+      const chart = am4core.create("chartDiv", am4charts.XYChart);
+
+      chart.language.locale = am4lang_pt_BR;
+      chart.data = data;
+
+      const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+      categoryAxis.dataFields.category = "month";
+      categoryAxis.title.text = "Mês";
+
+      const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      valueAxis.title.text = "Valor";
+
+      const paretoSeries = chart.series.push(new am4charts.ColumnSeries());
+      paretoSeries.dataFields.valueY = "cdi";
+      paretoSeries.dataFields.categoryX = "month";
+      paretoSeries.tooltipText = "CDI: ";
+      paretoSeries.name = "CDI";
+
+      const poupancaSeries = chart.series.push(new am4charts.ColumnSeries());
+      poupancaSeries.dataFields.valueY = "poupanca";
+      poupancaSeries.dataFields.categoryX = "month";
+      poupancaSeries.name = "Poupança";
+      poupancaSeries.tooltipText = "Poupança: {poupanca}";
+      
+      const tesouroDiretoSeries = chart.series.push(new am4charts.ColumnSeries());
+      tesouroDiretoSeries.dataFields.valueY = "tesouroDireto";
+      tesouroDiretoSeries.dataFields.categoryX = "month";
+      tesouroDiretoSeries.name = "Tesouro Direto";
+      tesouroDiretoSeries.tooltipText = "Tesouro Direto: {tesouroDireto}";
+
+
+
+      chart.legend = new am4charts.Legend();
+    }
+
+
+
+
+
+  </script>
+</body>
+</html>
