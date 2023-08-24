@@ -37,9 +37,9 @@
       const time = parseFloat(document.getElementById('time').value);
       const timeUnit = document.getElementById('timeUnit').value;
 
-      const cdiRate = 0.005; // Exemplo de taxa CDI
-      const poupancaRate = 0.004; // Exemplo de taxa de poupança
-      const tesouroDiretoRate = 0.007; // Exemplo de taxa Tesouro Direto
+      const cdiRate = 0.0114; // Exemplo de taxa CDI
+      const poupancaRate = 0.005; // Exemplo de taxa de poupança
+      const tesouroDiretoRate = 0.0114; // Exemplo de taxa Tesouro Direto
       
       const data = [];
       let cumulativeAmount = initialAmount;
@@ -47,12 +47,17 @@
       for (let i = 1; i <= time; i++) {
         const month = timeUnit === 'years' ? i * 12 : i;
         
-        cumulativeAmount += monthlyContribution;
+     //   cumulativeAmount += monthlyContribution;
 
-        const cdiValue = cumulativeAmount * Math.pow(1 + cdiRate, month);
-        const poupancaValue = cumulativeAmount * Math.pow(1 + poupancaRate, month);
-        const tesouroDiretoValue = cumulativeAmount * Math.pow(1 + tesouroDiretoRate, month);
+    //    VF = P * (1 + i)^n + (A * i)^n
 
+    const cdiValue = cumulativeAmount * Math.pow(1 + cdiRate, month) + (monthlyContribution * ((Math.pow(1 + cdiRate, month) - 1) / cdiRate));
+const poupancaValue = cumulativeAmount * Math.pow(1 + poupancaRate, month) + (monthlyContribution * ((Math.pow(1 + poupancaRate, month) - 1) / poupancaRate));
+const tesouroDiretoValue = cumulativeAmount * Math.pow(1 + tesouroDiretoRate, month) + (monthlyContribution * ((Math.pow(1 + tesouroDiretoRate, month) - 1) / tesouroDiretoRate));
+
+//Consideram a fórmula de juros compostos para a parcela das contribuições mensais, e por isso a subtração por 1 e divisão pela taxa.
+
+        
         data.push({
           month,
           cdi: cdiValue,
